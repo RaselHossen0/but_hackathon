@@ -1,6 +1,7 @@
 const express = require('express');
 const { connectDB ,sequelize} = require('./config/db');
 const authRoutes = require('./routes/Auth');
+const profileRoutes = require('./routes/Profile');
 
 const swaggerSetup = require('./swagger');
 const User = require('./models/User');
@@ -26,7 +27,7 @@ const upload = multer({ storage: storage });
 swaggerSetup(app);
 // Connect to the database
 connectDB();
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
   console.log('Database & tables created!');
 });
 
@@ -35,6 +36,8 @@ sequelize.sync({ force: false }).then(() => {
 
 
 app.use('/api/auth', authRoutes);
+
+app.use('/api/profile', profileRoutes);
 app.get('/', async (req, res) => {
  res.send('Hello World');
 }
