@@ -19,7 +19,11 @@ const User = sequelize.define('User', {
   image : {
     type: DataTypes.STRING,
     allowNull: true
-  }
+  },
+  otp: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   // Add new fields here
 });
 

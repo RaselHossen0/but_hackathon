@@ -27,7 +27,7 @@ app.use(cors({
 swaggerSetup(app);
 // Connect to the database
 connectDB();
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: false,alter: true }).then(() => {
   console.log('Database & tables created!');
 });
 
