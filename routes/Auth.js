@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const multer = require('multer');
+const path = require('path');
 require('dotenv').config();
 
 const router = express.Router();
@@ -52,9 +54,22 @@ const router = express.Router();
  *         description: Server error
  */
 // Register User
-router.post('/register', async (req, res) => {
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
+
+router.post('/register', upload.single('image'), async (req, res) => {
   const { name, email, password } = req.body;
-  console.log(req.body);
+  const image = req.file ? req.file.path : null;
+
   try {
     // Check if user already exists
     let user = await User.findOne({ where: { email } });
@@ -70,7 +85,8 @@ router.post('/register', async (req, res) => {
     user = await User.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      image
     });
 
     // Generate JWT token
