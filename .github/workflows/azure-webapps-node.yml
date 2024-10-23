@@ -53,8 +53,8 @@ jobs:
             pwd 
 
             # Pull the latest changes from GitHub
-            git fetch origin main
-            git pull origin main
+            git reset --hard
+            git pull origin main --force
 
             # Install any new dependencies
             npm install
