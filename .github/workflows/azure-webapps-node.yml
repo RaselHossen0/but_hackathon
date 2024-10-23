@@ -32,7 +32,7 @@ jobs:
 
       - name: Add Server to Known Hosts
         run: |
-          ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
+          ssh-keyscan -H 4.240.96.205 >> ~/.ssh/known_hosts
         shell: bash
 
       - name: Deploy to Azure Ubuntu Server
@@ -42,9 +42,9 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_NAME: ${{ secrets.DB_NAME }}
         run: |
-          ssh -i ~/.ssh/id_rsa user@your-server-ip << EOF
+          ssh -i ~/.ssh/id_rsa ubuntu@4.240.96.205 << EOF
             # Navigate to your app's directory
-            cd /path/to/your/app
+            cd ~/but-hackathon
 
             # Pull the latest changes from GitHub
             git pull origin main
@@ -59,7 +59,7 @@ jobs:
             echo "DB_NAME=${DB_NAME}" >> .env
 
             # Restart the Node.js application (using pm2 or another process manager)
-            pm2 restart all || pm2 start app.js --name "your-app-name"
+            pm2 restart all || pm2 start server.js --name "nofear-backend"
 
             # If MySQL is involved, ensure the database is running
             sudo systemctl restart mysql
