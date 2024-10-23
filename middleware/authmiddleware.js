@@ -3,7 +3,8 @@ require('dotenv').config();
 
 const authMiddleware = (req, res, next) => {
   // Get token from header
-  const token = req.header('Authorization');
+  const authHeader = req.header('Authorization');
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
 
   // Check if no token
   if (!token) {

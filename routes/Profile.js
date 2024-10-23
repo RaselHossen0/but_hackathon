@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const authMiddleware = require('../middleware/authmiddleware'); // Adjust the path as necessary
 const User = require('../models/User'); // Adjust the path as necessary
+const multer = require('multer');
 
 const router = express.Router();
 
@@ -11,7 +12,9 @@ const router = express.Router();
 // Endpoint to get all users
 router.get('/users', authMiddleware, async (req, res) => {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            attributes: { exclude: ['password'] } // Exclude the password field
+        });
         res.json(users);
     } catch (error) {
         res.status(500).send('An error occurred while fetching users');
@@ -19,7 +22,9 @@ router.get('/users', authMiddleware, async (req, res) => {
 });
 
 // Endpoint to update user profile
-router.put('/update/:userId', authMiddleware, async (req, res) => {
+const upload = multer({ dest: 'uploads/' }); // Configure multer to save files to the 'uploads' directory
+
+router.put('/update/:userId', authMiddleware, upload.single('image'), async (req, res) => {
     const userId = req.params.userId;
     const updatedInfo = req.body;
 
@@ -27,6 +32,11 @@ router.put('/update/:userId', authMiddleware, async (req, res) => {
         const user = await User.findByPk(userId);
         if (!user) {
             return res.status(404).send('User not found');
+        }
+
+        // Check if an image is being updated
+        if (req.file) {
+            updatedInfo.image = req.file.path; // Multer saves the file and adds the path to req.file
         }
 
         await user.update(updatedInfo);

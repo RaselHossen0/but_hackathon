@@ -27,7 +27,7 @@ const upload = multer({ storage: storage });
 swaggerSetup(app);
 // Connect to the database
 connectDB();
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   console.log('Database & tables created!');
 });
 
