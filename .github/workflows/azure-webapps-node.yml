@@ -53,6 +53,7 @@ jobs:
             pwd 
 
             # Pull the latest changes from GitHub
+            git fetch origin main
             git pull origin main
 
             # Install any new dependencies

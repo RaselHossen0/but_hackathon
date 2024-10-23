@@ -21,10 +21,6 @@ const User = sequelize.define('User', {
     allowNull: true
   }
   // Add new fields here
-}, {
-  timestamps: true,
-  // Enable automatic schema synchronization
- 
 });
 
 module.exports = User;
