@@ -7,6 +7,8 @@ const swaggerSetup = require('./swagger');
 const User = require('./models/User');
 const cors = require('cors');
 const multer = require('multer');
+const cluster = require('cluster');
+const os = require('os');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,16 +16,14 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
-app.use(cors());
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Destination folder
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname); // File naming format
-  }
-});
-const upload = multer({ storage: storage });
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all standard methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+  credentials: true, // Allow credentials
+  optionsSuccessStatus: 204 // Some legacy browsers choke on 204
+}));
+
 swaggerSetup(app);
 // Connect to the database
 connectDB();
@@ -43,9 +43,29 @@ app.get('/', async (req, res) => {
 }
 );
 
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 
+// if (cluster.isMaster) {
+//   const numCPUs = os.cpus().length;
+//   console.log(`Master ${process.pid} is running`);
+//   console.log(`Forking for ${numCPUs} CPUs`);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+//   // Fork workers.
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`Worker ${worker.process.pid} died`);
+//     console.log('Starting a new worker');
+//     cluster.fork();
+//   });
+// } else {
+//   // Workers can share any TCP connection
+//   // In this case it is an HTTP server
+//   app.listen(PORT, () => {
+//     console.log(`Worker ${process.pid} started`);
+//   });
+// }
