@@ -46,7 +46,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa azureuser@4.240.96.205 << EOF
             # Navigate to your app's directory
-            cd ~/but-hackathon
+            cd /home/azureuser/but_hackathon
+
+            ls -la
+            pwd 
 
             # Pull the latest changes from GitHub
             git pull origin main
