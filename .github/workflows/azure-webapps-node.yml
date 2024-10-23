@@ -44,6 +44,8 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           PORT   : ${{ secrets.PORT  || 3000}}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          EMAIL_USER : ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS : ${{ secrets.EMAIL_PASS }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa azureuser@4.240.96.205 << EOF
             # Navigate to your app's directory
@@ -66,9 +68,11 @@ jobs:
             echo "DB_NAME=${DB_NAME}" >> .env
             echo "PORT = ${PORT} " >> .env
             echo "JWT_SECRET=${JWT_SECRET}" >> .env
+            echo "EMAIL_USER=${EMAIL_USER}" >> .env
+            echo "EMAIL_PASS=${EMAIL_PASS}" >> .env
 
             # Restart the Node.js application (using pm2 or another process manager)
-            pm2 restart all || pm2 start server.js --name "nofear-backend"
+            pm2 restart nofear-backend
 
             # If MySQL is involved, ensure the database is running
             sudo systemctl restart mysql
