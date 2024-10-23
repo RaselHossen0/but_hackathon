@@ -18,10 +18,23 @@ const User = sequelize.define('User', {
   },
   image : {
     type: DataTypes.STRING,
-    allowNull: true,
-  },
+    allowNull: true
+  }
+  // Add new fields here
 }, {
   timestamps: true,
+  // Enable automatic schema synchronization
+  hooks: {
+    afterSync: async (options) => {
+      try {
+        await sequelize.queryInterface.removeColumn('Users', 'wallet_address');
+      }
+      catch (error) {
+        //console.log(error);
+      }
+     
+    }
+  }
 });
 
 module.exports = User;
