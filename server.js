@@ -1,7 +1,7 @@
 const express = require('express');
 const { connectDB ,sequelize} = require('./config/db');
 const authRoutes = require('./routes/Auth');
-const walletRoutes = require('./routes/Trust')
+
 const swaggerSetup = require('./swagger');
 const User = require('./models/User');
 
@@ -23,7 +23,7 @@ sequelize.sync({ force: false }).then(() => {
 
 app.use('/api/auth', authRoutes);
 
-app.use('/api/trust', walletRoutes);
+
 
 // Start server
 app.listen(PORT, () => {
