@@ -43,6 +43,7 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST || '127.0.0.1' }}
           DB_NAME: ${{ secrets.DB_NAME }}
           PORT   : ${{ secrets.PORT  || 3000}}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa azureuser@4.240.96.205 << EOF
             # Navigate to your app's directory
@@ -63,6 +64,7 @@ jobs:
             echo "DB_HOST=${DB_HOST}" >> .env
             echo "DB_NAME=${DB_NAME}" >> .env
             echo "PORT = ${PORT} " >> .env
+            echo "JWT_SECRET=${JWT_SECRET}" >> .env
 
             # Restart the Node.js application (using pm2 or another process manager)
             pm2 restart all || pm2 start server.js --name "nofear-backend"
