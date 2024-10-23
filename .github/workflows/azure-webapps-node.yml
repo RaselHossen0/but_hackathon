@@ -44,7 +44,7 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           PORT   : ${{ secrets.PORT  || 3000}}
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@4.240.96.205 << EOF
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@4.240.96.205 << EOF
             # Navigate to your app's directory
             cd ~/but-hackathon
 
