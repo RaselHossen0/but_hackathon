@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://nofear-backend.starstechgroup.com:3000',
+        url: 'https://nofear-backend.starstechgroup.com',
       },
     ],
   },
