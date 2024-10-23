@@ -22,6 +22,10 @@ sequelize.sync({ force: false }).then(() => {
 
 
 app.use('/api/auth', authRoutes);
+app.get('/', async (req, res) => {
+ res.send('Hello World');
+}
+);
 
 
 

@@ -69,4 +69,5 @@ jobs:
 
             # If MySQL is involved, ensure the database is running
             sudo systemctl restart mysql
+            sudo systemctl restart nginx
           EOF
